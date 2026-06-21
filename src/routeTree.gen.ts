@@ -19,6 +19,7 @@ import { Route as AppInboxRouteImport } from './routes/_app.inbox'
 import { Route as AppContactsRouteImport } from './routes/_app.contacts'
 import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
 import { Route as AppBillingRouteImport } from './routes/_app.billing'
+import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -69,9 +70,15 @@ const AppBillingRoute = AppBillingRouteImport.update({
   path: '/billing',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/analytics': typeof AppAnalyticsRoute
   '/billing': typeof AppBillingRoute
   '/campaigns': typeof AppCampaignsRoute
   '/contacts': typeof AppContactsRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/templates': typeof AppTemplatesRoute
 }
 export interface FileRoutesByTo {
+  '/analytics': typeof AppAnalyticsRoute
   '/billing': typeof AppBillingRoute
   '/campaigns': typeof AppCampaignsRoute
   '/contacts': typeof AppContactsRoute
@@ -95,6 +103,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/billing': typeof AppBillingRoute
   '/_app/campaigns': typeof AppCampaignsRoute
   '/_app/contacts': typeof AppContactsRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analytics'
     | '/billing'
     | '/campaigns'
     | '/contacts'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/analytics'
     | '/billing'
     | '/campaigns'
     | '/contacts'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
+    | '/_app/analytics'
     | '/_app/billing'
     | '/_app/campaigns'
     | '/_app/contacts'
@@ -218,10 +230,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBillingRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/analytics': {
+      id: '/_app/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AppAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppBillingRoute: typeof AppBillingRoute
   AppCampaignsRoute: typeof AppCampaignsRoute
   AppContactsRoute: typeof AppContactsRoute
@@ -234,6 +254,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAnalyticsRoute: AppAnalyticsRoute,
   AppBillingRoute: AppBillingRoute,
   AppCampaignsRoute: AppCampaignsRoute,
   AppContactsRoute: AppContactsRoute,
