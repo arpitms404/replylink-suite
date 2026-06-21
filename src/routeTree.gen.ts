@@ -14,6 +14,7 @@ import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppTemplatesRouteImport } from './routes/_app.templates'
 import { Route as AppTeamRouteImport } from './routes/_app.team'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppReportsRouteImport } from './routes/_app.reports'
 import { Route as AppInboxRouteImport } from './routes/_app.inbox'
 import { Route as AppContactsRouteImport } from './routes/_app.contacts'
 import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
@@ -43,6 +44,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInboxRoute = AppInboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/campaigns': typeof AppCampaignsRoute
   '/contacts': typeof AppContactsRoute
   '/inbox': typeof AppInboxRoute
+  '/reports': typeof AppReportsRoute
   '/settings': typeof AppSettingsRoute
   '/team': typeof AppTeamRoute
   '/templates': typeof AppTemplatesRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByTo {
   '/campaigns': typeof AppCampaignsRoute
   '/contacts': typeof AppContactsRoute
   '/inbox': typeof AppInboxRoute
+  '/reports': typeof AppReportsRoute
   '/settings': typeof AppSettingsRoute
   '/team': typeof AppTeamRoute
   '/templates': typeof AppTemplatesRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   '/_app/campaigns': typeof AppCampaignsRoute
   '/_app/contacts': typeof AppContactsRoute
   '/_app/inbox': typeof AppInboxRoute
+  '/_app/reports': typeof AppReportsRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/team': typeof AppTeamRoute
   '/_app/templates': typeof AppTemplatesRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/contacts'
     | '/inbox'
+    | '/reports'
     | '/settings'
     | '/team'
     | '/templates'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/contacts'
     | '/inbox'
+    | '/reports'
     | '/settings'
     | '/team'
     | '/templates'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/_app/campaigns'
     | '/_app/contacts'
     | '/_app/inbox'
+    | '/_app/reports'
     | '/_app/settings'
     | '/_app/team'
     | '/_app/templates'
@@ -171,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/reports': {
+      id: '/_app/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inbox': {
       id: '/_app/inbox'
       path: '/inbox'
@@ -207,6 +226,7 @@ interface AppRouteChildren {
   AppCampaignsRoute: typeof AppCampaignsRoute
   AppContactsRoute: typeof AppContactsRoute
   AppInboxRoute: typeof AppInboxRoute
+  AppReportsRoute: typeof AppReportsRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppTeamRoute: typeof AppTeamRoute
   AppTemplatesRoute: typeof AppTemplatesRoute
@@ -218,6 +238,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCampaignsRoute: AppCampaignsRoute,
   AppContactsRoute: AppContactsRoute,
   AppInboxRoute: AppInboxRoute,
+  AppReportsRoute: AppReportsRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppTeamRoute: AppTeamRoute,
   AppTemplatesRoute: AppTemplatesRoute,
