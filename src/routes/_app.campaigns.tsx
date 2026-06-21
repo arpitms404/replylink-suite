@@ -48,12 +48,12 @@ function CampaignsPage() {
         <div className="p-4 border-b border-border flex items-center gap-3">
           <div className="relative flex-1 max-w-sm">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
-            <input defaultValue={search.q} onChange={e=>navigate({ search: prev => ({ ...prev, q: e.target.value }) })}
+            <input defaultValue={search.q} onChange={e=>navigate({ search: (prev: any) => ({ ...prev, q: e.target.value }) })}
               placeholder="Search campaigns..." className="w-full h-9 pl-9 pr-3 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"/>
           </div>
           <div className="flex gap-1.5">
             {["all","running","scheduled","paused","completed","failed","draft"].map(s => (
-              <button key={s} onClick={()=>navigate({ search: prev => ({ ...prev, status: s }) })}
+              <button key={s} onClick={()=>navigate({ search: (prev: any) => ({ ...prev, status: s }) })}
                 className={`h-8 px-3 rounded-full text-xs font-medium capitalize ${search.status===s?"bg-ink text-white":"bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
                 {s}
               </button>
