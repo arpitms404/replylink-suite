@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppTemplatesRouteImport } from './routes/_app.templates'
+import { Route as AppTeamRouteImport } from './routes/_app.team'
 import { Route as AppInboxRouteImport } from './routes/_app.inbox'
 import { Route as AppContactsRouteImport } from './routes/_app.contacts'
 import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
@@ -28,6 +29,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppTemplatesRoute = AppTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInboxRoute = AppInboxRouteImport.update({
@@ -51,12 +57,14 @@ export interface FileRoutesByFullPath {
   '/campaigns': typeof AppCampaignsRoute
   '/contacts': typeof AppContactsRoute
   '/inbox': typeof AppInboxRoute
+  '/team': typeof AppTeamRoute
   '/templates': typeof AppTemplatesRoute
 }
 export interface FileRoutesByTo {
   '/campaigns': typeof AppCampaignsRoute
   '/contacts': typeof AppContactsRoute
   '/inbox': typeof AppInboxRoute
+  '/team': typeof AppTeamRoute
   '/templates': typeof AppTemplatesRoute
   '/': typeof AppIndexRoute
 }
@@ -66,20 +74,28 @@ export interface FileRoutesById {
   '/_app/campaigns': typeof AppCampaignsRoute
   '/_app/contacts': typeof AppContactsRoute
   '/_app/inbox': typeof AppInboxRoute
+  '/_app/team': typeof AppTeamRoute
   '/_app/templates': typeof AppTemplatesRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/campaigns' | '/contacts' | '/inbox' | '/templates'
+  fullPaths:
+    | '/'
+    | '/campaigns'
+    | '/contacts'
+    | '/inbox'
+    | '/team'
+    | '/templates'
   fileRoutesByTo: FileRoutesByTo
-  to: '/campaigns' | '/contacts' | '/inbox' | '/templates' | '/'
+  to: '/campaigns' | '/contacts' | '/inbox' | '/team' | '/templates' | '/'
   id:
     | '__root__'
     | '/_app'
     | '/_app/campaigns'
     | '/_app/contacts'
     | '/_app/inbox'
+    | '/_app/team'
     | '/_app/templates'
     | '/_app/'
   fileRoutesById: FileRoutesById
@@ -111,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTemplatesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/team': {
+      id: '/_app/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inbox': {
       id: '/_app/inbox'
       path: '/inbox'
@@ -139,6 +162,7 @@ interface AppRouteChildren {
   AppCampaignsRoute: typeof AppCampaignsRoute
   AppContactsRoute: typeof AppContactsRoute
   AppInboxRoute: typeof AppInboxRoute
+  AppTeamRoute: typeof AppTeamRoute
   AppTemplatesRoute: typeof AppTemplatesRoute
   AppIndexRoute: typeof AppIndexRoute
 }
@@ -147,6 +171,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCampaignsRoute: AppCampaignsRoute,
   AppContactsRoute: AppContactsRoute,
   AppInboxRoute: AppInboxRoute,
+  AppTeamRoute: AppTeamRoute,
   AppTemplatesRoute: AppTemplatesRoute,
   AppIndexRoute: AppIndexRoute,
 }
