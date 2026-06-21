@@ -16,6 +16,7 @@ import { Route as AppTeamRouteImport } from './routes/_app.team'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppReportsRouteImport } from './routes/_app.reports'
 import { Route as AppInboxRouteImport } from './routes/_app.inbox'
+import { Route as AppConversationsRouteImport } from './routes/_app.conversations'
 import { Route as AppContactsRouteImport } from './routes/_app.contacts'
 import { Route as AppContactListsRouteImport } from './routes/_app.contact-lists'
 import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
@@ -56,6 +57,11 @@ const AppInboxRoute = AppInboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => AppRoute,
 } as any)
+const AppConversationsRoute = AppConversationsRouteImport.update({
+  id: '/conversations',
+  path: '/conversations',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppContactsRoute = AppContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/campaigns': typeof AppCampaignsRoute
   '/contact-lists': typeof AppContactListsRoute
   '/contacts': typeof AppContactsRoute
+  '/conversations': typeof AppConversationsRoute
   '/inbox': typeof AppInboxRoute
   '/reports': typeof AppReportsRoute
   '/settings': typeof AppSettingsRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/campaigns': typeof AppCampaignsRoute
   '/contact-lists': typeof AppContactListsRoute
   '/contacts': typeof AppContactsRoute
+  '/conversations': typeof AppConversationsRoute
   '/inbox': typeof AppInboxRoute
   '/reports': typeof AppReportsRoute
   '/settings': typeof AppSettingsRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/_app/campaigns': typeof AppCampaignsRoute
   '/_app/contact-lists': typeof AppContactListsRoute
   '/_app/contacts': typeof AppContactsRoute
+  '/_app/conversations': typeof AppConversationsRoute
   '/_app/inbox': typeof AppInboxRoute
   '/_app/reports': typeof AppReportsRoute
   '/_app/settings': typeof AppSettingsRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/contact-lists'
     | '/contacts'
+    | '/conversations'
     | '/inbox'
     | '/reports'
     | '/settings'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/contact-lists'
     | '/contacts'
+    | '/conversations'
     | '/inbox'
     | '/reports'
     | '/settings'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/_app/campaigns'
     | '/_app/contact-lists'
     | '/_app/contacts'
+    | '/_app/conversations'
     | '/_app/inbox'
     | '/_app/reports'
     | '/_app/settings'
@@ -221,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInboxRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/conversations': {
+      id: '/_app/conversations'
+      path: '/conversations'
+      fullPath: '/conversations'
+      preLoaderRoute: typeof AppConversationsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/contacts': {
       id: '/_app/contacts'
       path: '/contacts'
@@ -265,6 +284,7 @@ interface AppRouteChildren {
   AppCampaignsRoute: typeof AppCampaignsRoute
   AppContactListsRoute: typeof AppContactListsRoute
   AppContactsRoute: typeof AppContactsRoute
+  AppConversationsRoute: typeof AppConversationsRoute
   AppInboxRoute: typeof AppInboxRoute
   AppReportsRoute: typeof AppReportsRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -279,6 +299,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCampaignsRoute: AppCampaignsRoute,
   AppContactListsRoute: AppContactListsRoute,
   AppContactsRoute: AppContactsRoute,
+  AppConversationsRoute: AppConversationsRoute,
   AppInboxRoute: AppInboxRoute,
   AppReportsRoute: AppReportsRoute,
   AppSettingsRoute: AppSettingsRoute,
