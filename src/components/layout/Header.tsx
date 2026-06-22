@@ -2,12 +2,16 @@ import { Search, Bell, ChevronDown } from "lucide-react";
 import { useAppStore } from "@/lib/mock/store";
 import type { Role } from "@/lib/mock/data";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/lib/auth";
 
 const roles: Role[] = ["Super Admin", "Admin", "Marketing Manager", "Support Agent"];
 
 export function Header() {
   const { currentRole, setCurrentRole, campaigns } = useAppStore();
+  const { user, logout } = useAuth();
   const running = campaigns.filter(c => c.status === "running").length;
+  const initials = (user?.full_name || "Priya Mehta").split(" ").map(s => s[0]).slice(0,2).join("").toUpperCase();
+  const displayName = user?.full_name || "Priya Mehta";
 
   return (
     <header className="h-16 bg-card border-b border-border sticky top-0 z-30 flex items-center px-6 gap-4">
@@ -43,9 +47,9 @@ export function Header() {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-2.5 h-10 pl-1 pr-3 rounded-full hover:bg-gray-100">
-            <div className="w-8 h-8 rounded-full bg-ink text-white text-xs font-semibold flex items-center justify-center">PM</div>
+            <div className="w-8 h-8 rounded-full bg-ink text-white text-xs font-semibold flex items-center justify-center">{initials}</div>
             <div className="text-left leading-tight">
-              <div className="text-sm font-semibold text-ink">Priya Mehta</div>
+              <div className="text-sm font-semibold text-ink">{displayName}</div>
               <div className="text-[10px] text-gray-500 font-medium">Viewing as: {currentRole}</div>
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -60,7 +64,7 @@ export function Header() {
             <DropdownMenuSeparator/>
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Switch Workspace</DropdownMenuItem>
-            <DropdownMenuItem className="text-error">Logout</DropdownMenuItem>
+            <DropdownMenuItem className="text-error" onClick={logout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
