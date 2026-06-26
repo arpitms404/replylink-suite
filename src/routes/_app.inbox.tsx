@@ -1,117 +1,152 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAppStore } from "@/lib/mock/store";
-import { canUserDo } from "@/lib/permissions";
-import { Search, Paperclip, Smile, Send, Clock, AlertTriangle, FileText, MoreVertical, Lock } from "lucide-react";
 import { useState } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { cn } from "@/lib/utils";
+import { Search, MoreVertical, Paperclip, Smile, Send, FileText, HelpCircle, LayoutGrid, ChevronDown, Plus } from "lucide-react";
+import { CONVERSATIONS, MESSAGES_1, initials, avatarColor } from "@/lib/chatpilot-data";
 
 export const Route = createFileRoute("/_app/inbox")({ component: InboxPage });
 
+const FILTER_GROUPS = [
+  { label: "All chats", items: [
+    { name: "Open", count: "1K+" }, { name: "Closed", count: "11" },
+    { name: "Awaiting reply", count: "1K+" }, { name: "Unread", count: "1K+" }, { name: "All", count: "" },
+  ]},
+  { label: "My chats", items: [{ name: "Open", count: "23" }, { name: "Closed", count: "5" }] },
+  { label: "Unassigned", items: [{ name: "Open", count: "8" }] },
+];
+
 function InboxPage() {
-  const { conversations, messages, currentRole } = useAppStore();
-  const [activeId, setActiveId] = useState(conversations[0]?.contact_id);
-  const canReply = canUserDo(currentRole, "reply_inbox");
-  const active = conversations.find(c => c.contact_id === activeId);
-  const thread = messages.filter(m => m.contact_id === activeId);
+  const [selectedId, setSelectedId] = useState<number | null>(1);
+  const [open, setOpen] = useState<Record<string, boolean>>({ "All chats": true, "My chats": false, "Unassigned": false });
+  const [activeFilter, setActiveFilter] = useState("Open");
+  const [draft, setDraft] = useState("");
+
+  const conv = CONVERSATIONS.find(c => c.id === selectedId) || null;
 
   return (
-    <div className="h-[calc(100vh-64px)] flex">
-      <div className="w-[360px] border-r border-border bg-card flex flex-col shrink-0">
-        <div className="p-4 border-b border-border">
-          <h2 className="text-base font-semibold text-ink mb-3">Inbox</h2>
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
-            <input placeholder="Search conversations..." className="w-full h-9 pl-9 pr-3 rounded-lg bg-gray-100 border-0 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"/>
+    <div className="flex h-screen">
+      {/* COL 1 — Filter panel */}
+      <div className="w-[200px] bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-3 border-b border-gray-100 flex items-center justify-between">
+          <h2 className="font-semibold text-sm">Inbox</h2>
+          <div className="flex items-center gap-2 text-gray-400">
+            <HelpCircle className="h-4 w-4 cursor-pointer" />
+            <LayoutGrid className="h-4 w-4 cursor-pointer" />
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto">
-          {conversations.map(c => (
-            <button key={c.contact_id} onClick={() => setActiveId(c.contact_id)}
-              className={cn("w-full p-3.5 border-b border-border text-left flex gap-3 hover:bg-gray-50", activeId === c.contact_id && "bg-brand-soft/40")}>
-              <div className="relative shrink-0">
-                <div className="w-10 h-10 rounded-full bg-gray-200 text-ink text-xs font-semibold flex items-center justify-center">{c.contactName.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
-                {c.slaBreached && <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-warning border-2 border-white" title="SLA breached"/>}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <div className="font-semibold text-sm text-ink truncate">{c.contactName}</div>
-                  <div className="text-[10px] text-gray-400 shrink-0">{formatDistanceToNow(new Date(c.lastMessageAt), { addSuffix: false })}</div>
-                </div>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <p className="text-xs text-gray-500 truncate flex-1">{c.lastMessage}</p>
-                  {c.unread > 0 && <span className="bg-brand text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center">{c.unread}</span>}
-                </div>
-                <div className="flex items-center gap-1.5 mt-1">
-                  {!c.assigned_agent_id && <span className="text-[10px] font-medium text-info bg-info/10 px-1.5 rounded">Unassigned</span>}
-                  {c.windowStatus === "closed" && <span className="text-[10px] font-medium text-gray-500 bg-gray-100 px-1.5 rounded">Window closed</span>}
-                </div>
-              </div>
-            </button>
+
+        <div className="flex-1 overflow-y-auto p-2 text-sm">
+          {FILTER_GROUPS.map(g => (
+            <div key={g.label} className="mb-2">
+              <button onClick={() => setOpen(s => ({ ...s, [g.label]: !s[g.label] }))} className="flex w-full items-center justify-between px-2 py-1.5 text-xs font-semibold text-gray-500 uppercase">
+                {g.label}
+                <ChevronDown className={`h-3 w-3 transition-transform ${open[g.label] ? "" : "-rotate-90"}`} />
+              </button>
+              {open[g.label] && (
+                <ul className="mt-1">
+                  {g.items.map(it => (
+                    <li key={it.name}>
+                      <button onClick={() => setActiveFilter(it.name)} className={`flex w-full items-center justify-between px-3 py-1.5 rounded-md ${activeFilter === it.name ? "bg-emerald-50 text-emerald-800" : "hover:bg-gray-50"}`}>
+                        <span>{it.name}</span>
+                        {it.count && <span className="text-xs text-emerald-700 font-medium">{it.count}</span>}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ))}
+
+          <div className="mt-3 border-t pt-3 px-2">
+            <div className="flex gap-1 mb-3">
+              <button className="flex-1 h-7 rounded-md bg-gray-100 text-xs font-medium">All Chats</button>
+              <button className="flex-1 h-7 rounded-md text-xs text-gray-500">Groups</button>
+            </div>
+            <label className="text-xs text-gray-500">Team member</label>
+            <button className="mt-1 w-full h-8 rounded-md border border-gray-200 px-2 text-left text-xs text-gray-500 flex items-center justify-between">Filter by member <ChevronDown className="h-3 w-3" /></button>
+            <label className="text-xs text-gray-500 mt-3 block">Tags</label>
+            <button className="mt-1 w-full h-8 rounded-md border border-gray-200 px-2 text-left text-xs text-gray-500 flex items-center justify-between">Filter by tags <ChevronDown className="h-3 w-3" /></button>
+            <label className="text-xs text-gray-500 mt-3 block">Channels</label>
+            <button className="mt-1 w-full h-8 rounded-md border border-gray-200 px-2 text-left text-xs text-gray-500 flex items-center justify-between">Filter by Channels <ChevronDown className="h-3 w-3" /></button>
+          </div>
+        </div>
+        <div className="p-3 border-t">
+          <button className="w-full h-9 rounded-md bg-[#0B6E4F] text-white text-sm font-medium flex items-center justify-center gap-1"><Plus className="h-4 w-4" /> New</button>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col min-w-0 bg-gray-50">
-        {active ? (
+      {/* COL 2 — Conversation list */}
+      <div className="w-[280px] bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-3 border-b flex items-center justify-between">
+          <h3 className="font-semibold text-sm">All chats</h3>
+          <div className="flex items-center gap-2 text-gray-400">
+            <Search className="h-4 w-4 cursor-pointer" />
+            <MoreVertical className="h-4 w-4 cursor-pointer" />
+          </div>
+        </div>
+        <div className="px-3 py-2 flex gap-2 border-b">
+          <button className="px-3 h-6 rounded-full bg-gray-100 text-xs">All</button>
+          <button className="px-3 h-6 rounded-full bg-emerald-50 text-emerald-700 text-xs">Yes 2</button>
+        </div>
+        <ul className="flex-1 overflow-y-auto">
+          {CONVERSATIONS.map(c => (
+            <li key={c.id}>
+              <button onClick={() => setSelectedId(c.id)} className={`w-full flex items-start gap-3 px-3 py-3 border-b border-gray-50 text-left hover:bg-gray-50 ${selectedId === c.id ? "bg-emerald-50/50" : ""}`}>
+                <div className="h-9 w-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ backgroundColor: avatarColor(c.contact) }}>
+                  {initials(c.contact)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium truncate">{c.contact}</span>
+                    <span className="text-[10px] text-gray-400">{c.time}</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-0.5">
+                    <span className="text-xs text-gray-500 truncate">{c.lastMsg}</span>
+                    {c.unread > 0 && <span className="ml-2 h-4 min-w-4 px-1 rounded-full bg-[#0B6E4F] text-white text-[10px] font-bold flex items-center justify-center">{c.unread}</span>}
+                  </div>
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* COL 3 — Thread */}
+      <div className="flex-1 flex flex-col bg-[#ECE5DD]">
+        {conv ? (
           <>
-            <div className="h-16 px-5 border-b border-border bg-card flex items-center gap-3 shrink-0">
-              <div className="w-10 h-10 rounded-full bg-gray-200 text-ink text-xs font-semibold flex items-center justify-center">{active.contactName.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
-              <div>
-                <div className="font-semibold text-sm text-ink">{active.contactName}</div>
-                <div className="text-xs text-gray-500">+91 98765 43210 · Mumbai</div>
+            <div className="px-4 py-3 bg-white border-b flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: avatarColor(conv.contact) }}>{initials(conv.contact)}</div>
+                <div>
+                  <div className="text-sm font-semibold">{conv.contact}</div>
+                  <div className="text-xs text-gray-500">{conv.phone}</div>
+                </div>
+                <span className="ml-2 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs">{conv.status}</span>
               </div>
-              <div className="ml-auto flex items-center gap-2">
-                {active.windowClosesInMin && <div className="text-xs text-warning bg-warning/10 px-2.5 h-7 rounded-full font-medium inline-flex items-center gap-1.5"><Clock className="w-3.5 h-3.5"/>Window closes in {active.windowClosesInMin} min</div>}
-                {!active.assigned_agent_id && <button className="text-xs bg-brand text-white px-3 h-7 rounded-md font-semibold">Take</button>}
-                <button className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center"><MoreVertical className="w-4 h-4 text-gray-500"/></button>
-              </div>
+              <MoreVertical className="h-4 w-4 text-gray-500" />
             </div>
 
             <div className="flex-1 overflow-y-auto p-6 space-y-3">
-              {thread.length === 0 && <div className="text-center text-sm text-gray-400 py-12">No messages yet</div>}
-              {thread.map(m => (
-                <div key={m.id} className={cn("flex", m.direction === "outbound" ? "justify-end" : "justify-start")}>
-                  <div className={cn("max-w-md rounded-xl px-3.5 py-2.5 shadow-card",
-                    m.direction === "outbound" ? "bg-brand-soft text-ink rounded-br-sm" : "bg-card border border-border rounded-bl-sm")}>
-                    <p className="text-sm">{m.body}</p>
-                    <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1 justify-end">
-                      {new Date(m.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                      {m.direction === "outbound" && <span className={m.status === "read" ? "text-info" : "text-gray-400"}>✓✓</span>}
-                    </div>
+              {MESSAGES_1.map((m, i) => (
+                <div key={i} className={`flex ${m.dir === "outbound" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-md px-3 py-2 rounded-lg text-sm shadow-sm ${m.dir === "outbound" ? "bg-[#DCF8C6] text-gray-900" : "bg-white text-gray-900"}`}>
+                    <div>{m.body}</div>
+                    <div className="text-[10px] text-gray-500 text-right mt-1">{m.time} {m.dir === "outbound" && (m.status === "read" ? "✓✓" : "✓")}</div>
                   </div>
                 </div>
               ))}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 max-w-md mx-auto">
-                <div className="text-[10px] font-semibold text-yellow-700 uppercase mb-1">Internal Note</div>
-                <p className="text-xs text-gray-700">Customer asked about delivery — follow up tomorrow.</p>
-              </div>
             </div>
 
-            <div className="border-t border-border bg-card p-4 shrink-0">
-              {!canReply ? (
-                <div className="h-12 rounded-lg bg-gray-100 flex items-center justify-center gap-2 text-sm text-gray-500"><Lock className="w-4 h-4"/>You have view-only access to conversations.</div>
-              ) : active.windowStatus === "closed" ? (
-                <div className="bg-warning/5 border border-warning/30 rounded-lg p-3 flex items-center gap-3">
-                  <AlertTriangle className="w-5 h-5 text-warning shrink-0"/>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-ink">This conversation window has closed</div>
-                    <div className="text-xs text-gray-500">Send a template message to re-engage this contact.</div>
-                  </div>
-                  <button className="h-9 px-4 rounded-lg bg-ink text-white text-sm font-semibold inline-flex items-center gap-1.5"><FileText className="w-4 h-4"/>Pick Template</button>
-                </div>
-              ) : (
-                <div className="flex items-end gap-2">
-                  <button className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500"><Paperclip className="w-4 h-4"/></button>
-                  <button className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500"><Smile className="w-4 h-4"/></button>
-                  <textarea rows={1} placeholder="Type a message..." className="flex-1 min-h-[40px] max-h-32 px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 resize-none"/>
-                  <button className="h-9 w-9 rounded-lg bg-brand text-white flex items-center justify-center"><Send className="w-4 h-4"/></button>
-                </div>
-              )}
+            <div className="bg-white border-t p-3 flex items-center gap-2">
+              <button className="text-gray-400 hover:text-gray-600"><Paperclip className="h-5 w-5" /></button>
+              <button className="text-gray-400 hover:text-gray-600"><Smile className="h-5 w-5" /></button>
+              <button className="text-gray-400 hover:text-gray-600" title="Templates"><FileText className="h-5 w-5" /></button>
+              <input value={draft} onChange={e => setDraft(e.target.value)} placeholder="Type a message…" className="flex-1 h-10 px-3 rounded-full border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200" />
+              <button className="h-10 px-4 rounded-full bg-[#0B6E4F] text-white text-sm font-medium flex items-center gap-1"><Send className="h-4 w-4" /> Send</button>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-400">Select a conversation</div>
+          <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">Start by clicking any chat in left panel</div>
         )}
       </div>
     </div>
