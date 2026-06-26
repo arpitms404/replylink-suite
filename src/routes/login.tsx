@@ -11,7 +11,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const router = useRouter();
   const [email, setEmail] = useState("Arpit@skilllogic.in");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(API_CONFIGURED ? "" : "Arpit@1122");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -20,10 +20,6 @@ function LoginPage() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!API_CONFIGURED) {
-      toast.error("API not configured. Set VITE_API_URL to your deployed server.");
-      return;
-    }
     setSubmitting(true);
     try {
       await login(email, password);
@@ -46,8 +42,8 @@ function LoginPage() {
         </div>
 
         {!API_CONFIGURED && (
-          <div className="mb-4 text-xs rounded-md border border-amber-200 bg-amber-50 text-amber-800 p-3">
-            <strong>API not configured.</strong> Deploy the <code>server/</code> Express API, then set <code>VITE_API_URL</code> in this project's environment variables and republish.
+          <div className="mb-4 text-xs rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800 p-3">
+            <strong>Demo mode.</strong> No backend connected — sign in with the seed admin (<code>Arpit@skilllogic.in</code> / <code>Arpit@1122</code>) to explore the app with sample data. Set <code>VITE_API_URL</code> to connect your deployed Express API.
           </div>
         )}
 

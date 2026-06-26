@@ -20,6 +20,25 @@ type AuthState = {
 
 const Ctx = createContext<AuthState | null>(null);
 
+const DEMO_USER_KEY = "skilllogic.demoUser";
+const DEMO_EMAIL = "Arpit@skilllogic.in";
+const DEMO_PASSWORD = "Arpit@1122";
+const DEMO_USER: AuthUser = {
+  id: "demo-user",
+  email: DEMO_EMAIL,
+  full_name: "Arpit Sharma",
+  role: "super_admin",
+  workspace_id: "demo-workspace",
+};
+
+function readDemoUser(): AuthUser | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(DEMO_USER_KEY);
+    return raw ? (JSON.parse(raw) as AuthUser) : null;
+  } catch { return null; }
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +46,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     async function boot() {
-      if (!API_CONFIGURED || !getToken()) { setLoading(false); return; }
+      if (!API_CONFIGURED) {
+        const u = readDemoUser();
+        if (!cancelled) { setUser(u); setLoading(false); }
+        return;
+      }
+      if (!getToken()) { setLoading(false); return; }
       try {
         const { user } = await api.get<{ user: AuthUser }>("/api/auth/me");
         if (!cancelled) setUser(user);
@@ -42,6 +66,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
+    if (!API_CONFIGURED) {
+      // Demo mode — accept seed credentials so the UI is usable without a backend.
+      if (email.trim().toLowerCase() !== DEMO_EMAIL.toLowerCase() || password !== DEMO_PASSWORD) {
+        throw new Error("Invalid credentials. Use the seed admin account to sign in.");
+      }
+      window.localStorage.setItem(DEMO_USER_KEY, JSON.stringify(DEMO_USER));
+      setUser(DEMO_USER);
+      return;
+    }
     const { token, user } = await api.post<{ token: string; user: AuthUser }>("/api/auth/login", { email, password });
     setToken(token);
     setUser(user);
@@ -49,6 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(() => {
     setToken(null);
+    if (typeof window !== "undefined") window.localStorage.removeItem(DEMO_USER_KEY);
     setUser(null);
     if (typeof window !== "undefined") window.location.href = "/login";
   }, []);
