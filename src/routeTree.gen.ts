@@ -20,14 +20,10 @@ import { Route as AppReportsRouteImport } from './routes/_app.reports'
 import { Route as AppInboxRouteImport } from './routes/_app.inbox'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppEnterpriseAnalyticsRouteImport } from './routes/_app.enterprise-analytics'
-import { Route as AppConversationsRouteImport } from './routes/_app.conversations'
 import { Route as AppContactsRouteImport } from './routes/_app.contacts'
-import { Route as AppContactListsRouteImport } from './routes/_app.contact-lists'
-import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
 import { Route as AppCallsRouteImport } from './routes/_app.calls'
 import { Route as AppBroadcastRouteImport } from './routes/_app.broadcast'
 import { Route as AppBotsRouteImport } from './routes/_app.bots'
-import { Route as AppBillingRouteImport } from './routes/_app.billing'
 import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
 import { Route as AppAiAgentRouteImport } from './routes/_app.ai-agent'
 import { Route as AppAdInsightsRouteImport } from './routes/_app.ad-insights'
@@ -86,24 +82,9 @@ const AppEnterpriseAnalyticsRoute = AppEnterpriseAnalyticsRouteImport.update({
   path: '/enterprise-analytics',
   getParentRoute: () => AppRoute,
 } as any)
-const AppConversationsRoute = AppConversationsRouteImport.update({
-  id: '/conversations',
-  path: '/conversations',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppContactsRoute = AppContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppContactListsRoute = AppContactListsRouteImport.update({
-  id: '/contact-lists',
-  path: '/contact-lists',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppCampaignsRoute = AppCampaignsRouteImport.update({
-  id: '/campaigns',
-  path: '/campaigns',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCallsRoute = AppCallsRouteImport.update({
@@ -119,11 +100,6 @@ const AppBroadcastRoute = AppBroadcastRouteImport.update({
 const AppBotsRoute = AppBotsRouteImport.update({
   id: '/bots',
   path: '/bots',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppBillingRoute = AppBillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
@@ -148,14 +124,10 @@ export interface FileRoutesByFullPath {
   '/ad-insights': typeof AppAdInsightsRoute
   '/ai-agent': typeof AppAiAgentRoute
   '/analytics': typeof AppAnalyticsRoute
-  '/billing': typeof AppBillingRoute
   '/bots': typeof AppBotsRoute
   '/broadcast': typeof AppBroadcastRoute
   '/calls': typeof AppCallsRoute
-  '/campaigns': typeof AppCampaignsRoute
-  '/contact-lists': typeof AppContactListsRoute
   '/contacts': typeof AppContactsRoute
-  '/conversations': typeof AppConversationsRoute
   '/enterprise-analytics': typeof AppEnterpriseAnalyticsRoute
   '/home': typeof AppHomeRoute
   '/inbox': typeof AppInboxRoute
@@ -170,14 +142,10 @@ export interface FileRoutesByTo {
   '/ad-insights': typeof AppAdInsightsRoute
   '/ai-agent': typeof AppAiAgentRoute
   '/analytics': typeof AppAnalyticsRoute
-  '/billing': typeof AppBillingRoute
   '/bots': typeof AppBotsRoute
   '/broadcast': typeof AppBroadcastRoute
   '/calls': typeof AppCallsRoute
-  '/campaigns': typeof AppCampaignsRoute
-  '/contact-lists': typeof AppContactListsRoute
   '/contacts': typeof AppContactsRoute
-  '/conversations': typeof AppConversationsRoute
   '/enterprise-analytics': typeof AppEnterpriseAnalyticsRoute
   '/home': typeof AppHomeRoute
   '/inbox': typeof AppInboxRoute
@@ -195,14 +163,10 @@ export interface FileRoutesById {
   '/_app/ad-insights': typeof AppAdInsightsRoute
   '/_app/ai-agent': typeof AppAiAgentRoute
   '/_app/analytics': typeof AppAnalyticsRoute
-  '/_app/billing': typeof AppBillingRoute
   '/_app/bots': typeof AppBotsRoute
   '/_app/broadcast': typeof AppBroadcastRoute
   '/_app/calls': typeof AppCallsRoute
-  '/_app/campaigns': typeof AppCampaignsRoute
-  '/_app/contact-lists': typeof AppContactListsRoute
   '/_app/contacts': typeof AppContactsRoute
-  '/_app/conversations': typeof AppConversationsRoute
   '/_app/enterprise-analytics': typeof AppEnterpriseAnalyticsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/inbox': typeof AppInboxRoute
@@ -221,14 +185,10 @@ export interface FileRouteTypes {
     | '/ad-insights'
     | '/ai-agent'
     | '/analytics'
-    | '/billing'
     | '/bots'
     | '/broadcast'
     | '/calls'
-    | '/campaigns'
-    | '/contact-lists'
     | '/contacts'
-    | '/conversations'
     | '/enterprise-analytics'
     | '/home'
     | '/inbox'
@@ -243,14 +203,10 @@ export interface FileRouteTypes {
     | '/ad-insights'
     | '/ai-agent'
     | '/analytics'
-    | '/billing'
     | '/bots'
     | '/broadcast'
     | '/calls'
-    | '/campaigns'
-    | '/contact-lists'
     | '/contacts'
-    | '/conversations'
     | '/enterprise-analytics'
     | '/home'
     | '/inbox'
@@ -267,14 +223,10 @@ export interface FileRouteTypes {
     | '/_app/ad-insights'
     | '/_app/ai-agent'
     | '/_app/analytics'
-    | '/_app/billing'
     | '/_app/bots'
     | '/_app/broadcast'
     | '/_app/calls'
-    | '/_app/campaigns'
-    | '/_app/contact-lists'
     | '/_app/contacts'
-    | '/_app/conversations'
     | '/_app/enterprise-analytics'
     | '/_app/home'
     | '/_app/inbox'
@@ -370,32 +322,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEnterpriseAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/conversations': {
-      id: '/_app/conversations'
-      path: '/conversations'
-      fullPath: '/conversations'
-      preLoaderRoute: typeof AppConversationsRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/contacts': {
       id: '/_app/contacts'
       path: '/contacts'
       fullPath: '/contacts'
       preLoaderRoute: typeof AppContactsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/contact-lists': {
-      id: '/_app/contact-lists'
-      path: '/contact-lists'
-      fullPath: '/contact-lists'
-      preLoaderRoute: typeof AppContactListsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/campaigns': {
-      id: '/_app/campaigns'
-      path: '/campaigns'
-      fullPath: '/campaigns'
-      preLoaderRoute: typeof AppCampaignsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/calls': {
@@ -417,13 +348,6 @@ declare module '@tanstack/react-router' {
       path: '/bots'
       fullPath: '/bots'
       preLoaderRoute: typeof AppBotsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/billing': {
-      id: '/_app/billing'
-      path: '/billing'
-      fullPath: '/billing'
-      preLoaderRoute: typeof AppBillingRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/analytics': {
@@ -454,14 +378,10 @@ interface AppRouteChildren {
   AppAdInsightsRoute: typeof AppAdInsightsRoute
   AppAiAgentRoute: typeof AppAiAgentRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
-  AppBillingRoute: typeof AppBillingRoute
   AppBotsRoute: typeof AppBotsRoute
   AppBroadcastRoute: typeof AppBroadcastRoute
   AppCallsRoute: typeof AppCallsRoute
-  AppCampaignsRoute: typeof AppCampaignsRoute
-  AppContactListsRoute: typeof AppContactListsRoute
   AppContactsRoute: typeof AppContactsRoute
-  AppConversationsRoute: typeof AppConversationsRoute
   AppEnterpriseAnalyticsRoute: typeof AppEnterpriseAnalyticsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppInboxRoute: typeof AppInboxRoute
@@ -477,14 +397,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdInsightsRoute: AppAdInsightsRoute,
   AppAiAgentRoute: AppAiAgentRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
-  AppBillingRoute: AppBillingRoute,
   AppBotsRoute: AppBotsRoute,
   AppBroadcastRoute: AppBroadcastRoute,
   AppCallsRoute: AppCallsRoute,
-  AppCampaignsRoute: AppCampaignsRoute,
-  AppContactListsRoute: AppContactListsRoute,
   AppContactsRoute: AppContactsRoute,
-  AppConversationsRoute: AppConversationsRoute,
   AppEnterpriseAnalyticsRoute: AppEnterpriseAnalyticsRoute,
   AppHomeRoute: AppHomeRoute,
   AppInboxRoute: AppInboxRoute,
