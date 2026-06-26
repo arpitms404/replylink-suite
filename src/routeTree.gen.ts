@@ -15,14 +15,22 @@ import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppTemplatesRouteImport } from './routes/_app.templates'
 import { Route as AppTeamRouteImport } from './routes/_app.team'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppScheduledRouteImport } from './routes/_app.scheduled'
 import { Route as AppReportsRouteImport } from './routes/_app.reports'
 import { Route as AppInboxRouteImport } from './routes/_app.inbox'
+import { Route as AppHomeRouteImport } from './routes/_app.home'
+import { Route as AppEnterpriseAnalyticsRouteImport } from './routes/_app.enterprise-analytics'
 import { Route as AppConversationsRouteImport } from './routes/_app.conversations'
 import { Route as AppContactsRouteImport } from './routes/_app.contacts'
 import { Route as AppContactListsRouteImport } from './routes/_app.contact-lists'
 import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
+import { Route as AppCallsRouteImport } from './routes/_app.calls'
+import { Route as AppBroadcastRouteImport } from './routes/_app.broadcast'
+import { Route as AppBotsRouteImport } from './routes/_app.bots'
 import { Route as AppBillingRouteImport } from './routes/_app.billing'
 import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
+import { Route as AppAiAgentRouteImport } from './routes/_app.ai-agent'
+import { Route as AppAdInsightsRouteImport } from './routes/_app.ad-insights'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -53,6 +61,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppScheduledRoute = AppScheduledRouteImport.update({
+  id: '/scheduled',
+  path: '/scheduled',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppReportsRoute = AppReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -61,6 +74,16 @@ const AppReportsRoute = AppReportsRouteImport.update({
 const AppInboxRoute = AppInboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHomeRoute = AppHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEnterpriseAnalyticsRoute = AppEnterpriseAnalyticsRouteImport.update({
+  id: '/enterprise-analytics',
+  path: '/enterprise-analytics',
   getParentRoute: () => AppRoute,
 } as any)
 const AppConversationsRoute = AppConversationsRouteImport.update({
@@ -83,6 +106,21 @@ const AppCampaignsRoute = AppCampaignsRouteImport.update({
   path: '/campaigns',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCallsRoute = AppCallsRouteImport.update({
+  id: '/calls',
+  path: '/calls',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBroadcastRoute = AppBroadcastRouteImport.update({
+  id: '/broadcast',
+  path: '/broadcast',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBotsRoute = AppBotsRouteImport.update({
+  id: '/bots',
+  path: '/bots',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppBillingRoute = AppBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
@@ -93,32 +131,58 @@ const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAiAgentRoute = AppAiAgentRouteImport.update({
+  id: '/ai-agent',
+  path: '/ai-agent',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdInsightsRoute = AppAdInsightsRouteImport.update({
+  id: '/ad-insights',
+  path: '/ad-insights',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
+  '/ad-insights': typeof AppAdInsightsRoute
+  '/ai-agent': typeof AppAiAgentRoute
   '/analytics': typeof AppAnalyticsRoute
   '/billing': typeof AppBillingRoute
+  '/bots': typeof AppBotsRoute
+  '/broadcast': typeof AppBroadcastRoute
+  '/calls': typeof AppCallsRoute
   '/campaigns': typeof AppCampaignsRoute
   '/contact-lists': typeof AppContactListsRoute
   '/contacts': typeof AppContactsRoute
   '/conversations': typeof AppConversationsRoute
+  '/enterprise-analytics': typeof AppEnterpriseAnalyticsRoute
+  '/home': typeof AppHomeRoute
   '/inbox': typeof AppInboxRoute
   '/reports': typeof AppReportsRoute
+  '/scheduled': typeof AppScheduledRoute
   '/settings': typeof AppSettingsRoute
   '/team': typeof AppTeamRoute
   '/templates': typeof AppTemplatesRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/ad-insights': typeof AppAdInsightsRoute
+  '/ai-agent': typeof AppAiAgentRoute
   '/analytics': typeof AppAnalyticsRoute
   '/billing': typeof AppBillingRoute
+  '/bots': typeof AppBotsRoute
+  '/broadcast': typeof AppBroadcastRoute
+  '/calls': typeof AppCallsRoute
   '/campaigns': typeof AppCampaignsRoute
   '/contact-lists': typeof AppContactListsRoute
   '/contacts': typeof AppContactsRoute
   '/conversations': typeof AppConversationsRoute
+  '/enterprise-analytics': typeof AppEnterpriseAnalyticsRoute
+  '/home': typeof AppHomeRoute
   '/inbox': typeof AppInboxRoute
   '/reports': typeof AppReportsRoute
+  '/scheduled': typeof AppScheduledRoute
   '/settings': typeof AppSettingsRoute
   '/team': typeof AppTeamRoute
   '/templates': typeof AppTemplatesRoute
@@ -128,14 +192,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/_app/ad-insights': typeof AppAdInsightsRoute
+  '/_app/ai-agent': typeof AppAiAgentRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/billing': typeof AppBillingRoute
+  '/_app/bots': typeof AppBotsRoute
+  '/_app/broadcast': typeof AppBroadcastRoute
+  '/_app/calls': typeof AppCallsRoute
   '/_app/campaigns': typeof AppCampaignsRoute
   '/_app/contact-lists': typeof AppContactListsRoute
   '/_app/contacts': typeof AppContactsRoute
   '/_app/conversations': typeof AppConversationsRoute
+  '/_app/enterprise-analytics': typeof AppEnterpriseAnalyticsRoute
+  '/_app/home': typeof AppHomeRoute
   '/_app/inbox': typeof AppInboxRoute
   '/_app/reports': typeof AppReportsRoute
+  '/_app/scheduled': typeof AppScheduledRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/team': typeof AppTeamRoute
   '/_app/templates': typeof AppTemplatesRoute
@@ -146,28 +218,44 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/ad-insights'
+    | '/ai-agent'
     | '/analytics'
     | '/billing'
+    | '/bots'
+    | '/broadcast'
+    | '/calls'
     | '/campaigns'
     | '/contact-lists'
     | '/contacts'
     | '/conversations'
+    | '/enterprise-analytics'
+    | '/home'
     | '/inbox'
     | '/reports'
+    | '/scheduled'
     | '/settings'
     | '/team'
     | '/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/ad-insights'
+    | '/ai-agent'
     | '/analytics'
     | '/billing'
+    | '/bots'
+    | '/broadcast'
+    | '/calls'
     | '/campaigns'
     | '/contact-lists'
     | '/contacts'
     | '/conversations'
+    | '/enterprise-analytics'
+    | '/home'
     | '/inbox'
     | '/reports'
+    | '/scheduled'
     | '/settings'
     | '/team'
     | '/templates'
@@ -176,14 +264,22 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/login'
+    | '/_app/ad-insights'
+    | '/_app/ai-agent'
     | '/_app/analytics'
     | '/_app/billing'
+    | '/_app/bots'
+    | '/_app/broadcast'
+    | '/_app/calls'
     | '/_app/campaigns'
     | '/_app/contact-lists'
     | '/_app/contacts'
     | '/_app/conversations'
+    | '/_app/enterprise-analytics'
+    | '/_app/home'
     | '/_app/inbox'
     | '/_app/reports'
+    | '/_app/scheduled'
     | '/_app/settings'
     | '/_app/team'
     | '/_app/templates'
@@ -239,6 +335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/scheduled': {
+      id: '/_app/scheduled'
+      path: '/scheduled'
+      fullPath: '/scheduled'
+      preLoaderRoute: typeof AppScheduledRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/reports': {
       id: '/_app/reports'
       path: '/reports'
@@ -251,6 +354,20 @@ declare module '@tanstack/react-router' {
       path: '/inbox'
       fullPath: '/inbox'
       preLoaderRoute: typeof AppInboxRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/enterprise-analytics': {
+      id: '/_app/enterprise-analytics'
+      path: '/enterprise-analytics'
+      fullPath: '/enterprise-analytics'
+      preLoaderRoute: typeof AppEnterpriseAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/conversations': {
@@ -281,6 +398,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCampaignsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/calls': {
+      id: '/_app/calls'
+      path: '/calls'
+      fullPath: '/calls'
+      preLoaderRoute: typeof AppCallsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/broadcast': {
+      id: '/_app/broadcast'
+      path: '/broadcast'
+      fullPath: '/broadcast'
+      preLoaderRoute: typeof AppBroadcastRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/bots': {
+      id: '/_app/bots'
+      path: '/bots'
+      fullPath: '/bots'
+      preLoaderRoute: typeof AppBotsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/billing': {
       id: '/_app/billing'
       path: '/billing'
@@ -295,18 +433,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/ai-agent': {
+      id: '/_app/ai-agent'
+      path: '/ai-agent'
+      fullPath: '/ai-agent'
+      preLoaderRoute: typeof AppAiAgentRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/ad-insights': {
+      id: '/_app/ad-insights'
+      path: '/ad-insights'
+      fullPath: '/ad-insights'
+      preLoaderRoute: typeof AppAdInsightsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAdInsightsRoute: typeof AppAdInsightsRoute
+  AppAiAgentRoute: typeof AppAiAgentRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppBillingRoute: typeof AppBillingRoute
+  AppBotsRoute: typeof AppBotsRoute
+  AppBroadcastRoute: typeof AppBroadcastRoute
+  AppCallsRoute: typeof AppCallsRoute
   AppCampaignsRoute: typeof AppCampaignsRoute
   AppContactListsRoute: typeof AppContactListsRoute
   AppContactsRoute: typeof AppContactsRoute
   AppConversationsRoute: typeof AppConversationsRoute
+  AppEnterpriseAnalyticsRoute: typeof AppEnterpriseAnalyticsRoute
+  AppHomeRoute: typeof AppHomeRoute
   AppInboxRoute: typeof AppInboxRoute
   AppReportsRoute: typeof AppReportsRoute
+  AppScheduledRoute: typeof AppScheduledRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppTeamRoute: typeof AppTeamRoute
   AppTemplatesRoute: typeof AppTemplatesRoute
@@ -314,14 +474,22 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdInsightsRoute: AppAdInsightsRoute,
+  AppAiAgentRoute: AppAiAgentRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppBillingRoute: AppBillingRoute,
+  AppBotsRoute: AppBotsRoute,
+  AppBroadcastRoute: AppBroadcastRoute,
+  AppCallsRoute: AppCallsRoute,
   AppCampaignsRoute: AppCampaignsRoute,
   AppContactListsRoute: AppContactListsRoute,
   AppContactsRoute: AppContactsRoute,
   AppConversationsRoute: AppConversationsRoute,
+  AppEnterpriseAnalyticsRoute: AppEnterpriseAnalyticsRoute,
+  AppHomeRoute: AppHomeRoute,
   AppInboxRoute: AppInboxRoute,
   AppReportsRoute: AppReportsRoute,
+  AppScheduledRoute: AppScheduledRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppTeamRoute: AppTeamRoute,
   AppTemplatesRoute: AppTemplatesRoute,
